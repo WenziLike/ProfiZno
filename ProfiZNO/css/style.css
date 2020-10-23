@@ -422,7 +422,7 @@ img:not([alt]) {
           transform: translateY(-200px);
 }
 
-.modal.hede .modal__overlay {
+.modal.hide .modal__overlay {
   background-color: rgba(0, 0, 0, 0);
 }
 
@@ -439,9 +439,9 @@ img:not([alt]) {
   bottom: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0);
-  -webkit-transition: background-color 0.4s ease-in;
-  -o-transition: background-color 0.4s ease-in;
-  transition: background-color 0.4s ease-in;
+  -webkit-transition: background-color 0.4s ease-in 0s;
+  -o-transition: background-color 0.4s ease-in 0s;
+  transition: background-color 0.4s ease-in 0s;
 }
 
 .modal__window {
@@ -452,11 +452,11 @@ img:not([alt]) {
   -webkit-transform: translateY(-200px);
       -ms-transform: translateY(-200px);
           transform: translateY(-200px);
-  -webkit-transition: -webkit-transform 0.4s ease-in;
-  transition: -webkit-transform 0.4s ease-in;
-  -o-transition: transform 0.4s ease-in;
-  transition: transform 0.4s ease-in;
-  transition: transform 0.4s ease-in, -webkit-transform 0.4s ease-in;
+  -webkit-transition: -webkit-transform 0.4s ease-in 0s;
+  transition: -webkit-transform 0.4s ease-in 0s;
+  -o-transition: transform 0.4s ease-in 0s;
+  transition: transform 0.4s ease-in 0s;
+  transition: transform 0.4s ease-in 0s, -webkit-transform 0.4s ease-in 0s;
 }
 
 .modal__header {
@@ -519,6 +519,75 @@ img:not([alt]) {
 .form__body.__sending::after {
   opacity: 1;
   visibility: visible;
+}
+
+div#send:not([class]) {
+  display: none;
+}
+
+.send__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1001;
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-transform: translateY(0%);
+      -ms-transform: translateY(0%);
+          transform: translateY(0%);
+  -webkit-transition: background-color 2s ease 0s;
+  -o-transition: background-color 2s ease 0s;
+  transition: background-color 2s ease 0s;
+}
+
+.send__active .send__window {
+  -webkit-transform: translateY(100%);
+      -ms-transform: translateY(100%);
+          transform: translateY(100%);
+}
+
+.send__active .send__overlay {
+  background-color: rgba(0, 0, 0, 0.884);
+}
+
+.send__window {
+  display: block;
+  margin: 0px auto;
+  padding: 30px 0;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 4px;
+  -webkit-box-shadow: 3px 8px 14px -3px #000000;
+          box-shadow: 3px 8px 14px -3px #000000;
+  color: #ffffff;
+  background: #41484aa8;
+  -webkit-transform: translateY(-200%);
+      -ms-transform: translateY(-200%);
+          transform: translateY(-200%);
+  -webkit-transition: -webkit-transform 2s ease 0s;
+  transition: -webkit-transform 2s ease 0s;
+  -o-transition: transform 2s ease 0s;
+  transition: transform 2s ease 0s;
+  transition: transform 2s ease 0s, -webkit-transform 2s ease 0s;
+}
+
+.send__content span.send__text {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  text-align: center;
+  padding: 20px;
+  text-shadow: 3px 5px 3px #000000;
+  font-weight: 500;
+  font-size: 1.2em;
+  letter-spacing: 1px;
 }
 
 .form__contacts {
