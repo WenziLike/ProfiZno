@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
             } else {
+                //! "Помилка при відправці !!! Перевірте інтернет з'єднання ..."
                 sendText.textContent = `${sendInfo.ErrorSending}`;
                 checkAndDelClass();
                 form.classList.remove('__sending');
