@@ -83,19 +83,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const form = document.getElementById('form'); //  взял весь обьект формы
     const send = document.getElementById('send');// получаю по ID, 2 модальное окно 
-    let sendText = document.querySelector('.send__text');
+    let sendText = document.querySelector('.send__text'); // получил значение информационного модального окна
     //=================================================================
+    // инфо для информационного модального окна
     const sendInfo = ({
         MessageSent: 'Дякуємо за Вашу заявку, ми сконтактуємось з Вами найближчим часом!!!', //message sent
-        ErrorSending: 'Ошибка при отправке!!!Проверьте  интернет соединение...',   //Error sending !!! Check your internet connection ...
-        FillInRequiredFields: 'Заполните обязательные поля!!!', //Fill in required fields!!!
-        EnterYourPhoneNumber: "Введите номер телефона!!!",   // Enter your phone number !!!
-        IncorrectNumber: "Не корректный номер телефона!!!", //Incorrect number !!!
+        ErrorSending: "Помилка при відправці !!! Перевірте інтернет з'єднання ...",   //Error sending !!! Check your internet connection ...
+        FillInRequiredFields: "Заповніть обов'язкові поля !!!", //Fill in required fields!!!
+        EnterYourPhoneNumber: "Введіть Ім'я і Прізвище !!!",   // Enter your phone number !!!
+        IncorrectNumber: "Некоректний номер телефону !!!", //Incorrect number !!!
     });
     //=================================================================
-
-
-
 
     form.addEventListener('submit', formSend);
 
@@ -105,29 +103,36 @@ document.addEventListener('DOMContentLoaded', function () {
         //=================================================================
         let error = formValidedate(form); // функция валидация перешла  в переменную error
         let formData = new FormData(form);
+        let InternetConnect = navigator.onLine; // проверка на подключение интернет соединения
+
         //=================================================================
         if (error === 0) {
             form.classList.add('__sending'); // если нет ошибок  добавляется класс 
+            // делаем на проверку подключения интернета
+            if (InternetConnect === true) {
+                // производим отправку
+                let response = await fetch('../../send.php', {
+                    method: 'POST',
+                    body: formData,
+                });
+                // получаем ответ от send.php если окей
+                if (response.ok) {
 
-            let response = await fetch('../../send.php', {
-                method: 'POST',
-                body: formData
-            });
-            if (response.ok) {
-                let result = await response.json();
-                // alert(result.message);
-                form.reset(); // очистка формы
-                form.classList.remove('__sending');
-                sendText.textContent = `${sendInfo.MessageSent}`;
-                checkAndDelClass();
-                // alert('Сообщение отправленно)))');
+                    form.reset(); // очистка формы
+                    // выводится  окно 
+                    //! Дякуємо за Вашу заявку, ми сконтактуємось з Вами найближчим часом!!!
+                    sendText.textContent = `${sendInfo.MessageSent}`;
+                    checkAndDelClass();
+                    form.classList.remove('__sending');
+                } else {
+                    form.classList.remove('__sending');
+                }
+
             } else {
+                sendText.textContent = `${sendInfo.ErrorSending}`;
+                checkAndDelClass();
                 form.classList.remove('__sending');
             }
-        } else {
-            // alert('Пожалуйста заполните обязательные поля!!!*');
-            // sendText.textContent = `${sendInfo.FillInRequiredFields}`;
-            // checkAndDelClass();
         }
     }
     //===================================================================================
@@ -144,25 +149,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     }, 1500);
                 }, 2800);
             }, 200);
-        } else {
-            // alert("Ошибка при отправке!!! Проверьте интернет соединение...");
-            sendText.textContent = `${sendInfo.ErrorSending}`;
-            checkAndDelClass();
         }
     }
     //===================================================================================
-    //функция валидации
+    //функция валидации проверки номера телефона  почты имени и фамилиии
     function formValidedate(form) {
         let error = 0;
         let formReq = document.querySelectorAll('.__req'); // взял все классы  __req в переменную
 
         for (let i = 0; i < formReq.length; i++) {
             const input = formReq[i];
-            console.log(formReq[i]);
             formRemoveError(input);// изначально убрал класс __error
 
-            // проверка
             if (input.classList.contains('__email')) {
+                //===========================
+                // проверка email 
                 if (emailTest(input)) {
                     formAddError(input);
                     error++;
@@ -171,28 +172,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 //===========================
                 //проверка теллефона
                 if (phoneTest(input) && input.value !== '') {
-                    formAddError(input);
-                    error++;
                     // !'Не корректный номер!!!
                     sendText.textContent = `${sendInfo.IncorrectNumber}`;
                     checkAndDelClass();
-
-
-                    // setTimeout(() => {
-
-                    // }, 2000);
+                    formAddError(input);
+                    error++;
                 } else {
-                    // TODO  //при проверке формы 
-                    // TODO // с незаполненными полями выводит введите номер  должно ыводить заполните обязательные поля
-
-
+                    //===========================
+                    // проверка обязательных полей формы заполнение формы  
                     if (input.value === "") {
                         formAddError(input);
                         error++;
-
                         setTimeout(() => {
-                            //!Введите номер телефона!!!
-                            sendText.textContent = `${sendInfo.EnterYourPhoneNumber}`;
+                            // !Заполните обязательные поля!!!
+                            sendText.textContent = `${sendInfo.FillInRequiredFields}`;
                             checkAndDelClass();
                         }, 10);
                     }
@@ -200,12 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 //===========================
             } else {
                 //===========================
-                // общая проверка пустых инпутов
-                if (input.value === "") {
+                // общая проверка пустых инпутов фамилиии и имени
+                if (input.value === "" && input.getAttribute("type") === "text") {
                     // !Заполните обязательные поля!!!
                     formAddError(input);
                     error++;
-                    sendText.textContent = `${sendInfo.FillInRequiredFields}`;
+                    sendText.textContent = `${sendInfo.EnterYourPhoneNumber}`;
                     checkAndDelClass();
                 }
             }
@@ -731,7 +724,7 @@ const modal = $.modal({
         </div>
 
         <div class="form__item">
-            <input type="text" name="email-address" class="form__input __req __email" placeholder="Пошта *:" autocomplete="off">
+            <input type="email" name="email-address" class="form__input __req __email" placeholder="Пошта *:" autocomplete="off">
         </div>
 
         <div class="form__item">
@@ -793,26 +786,14 @@ const modal = $.modal({
     ]
 });
 //=================================================================================
-// const sendInfo = $.modal({
-//     MessageSent: 'Дякуємо за Вашу заявку, ми сконтактуємось з Вами найближчим часом!!!',
-//     ErrorSending: 'Ошибка при отправке!!!',
-//     FillInRequiredFields: 'Заполните обязательные поля!!!',
-
-
-// });
-//=================================================================================
 // вызов модального окна по кнопке в Header
 // const buttModals = document.querySelector('.btn');
 const buttModals = document.querySelector('[data-modal]'); //получил кнопку по атрибуту
 
 const fu = buttModals.addEventListener('click', () => {
     modal.open();// открытие модального окна
-    // ModalBtn();// вызывается функция кнопки в модальном окне
+    ModalBtn();// вызывается функция кнопки в модальном окне
 });
-//=================================================================================
-// autocomplete="off"
-
-
 //=================================================================================
 // функция  открытия  и закрытие карточек
 let cards = document.querySelectorAll('.card');
