@@ -2224,6 +2224,14 @@ body main .footer__body {
     display: -ms-flexbox;
     display: flex;
   }
+
+  .menu .menu__nav-list li {
+    margin: 0 0 0 10vh;
+  }
+
+  .menu .menu__nav-list li:nth-child(1) {
+    margin: 0 0 0 0;
+  }
 }
 
 @media (max-width: 992px) {
