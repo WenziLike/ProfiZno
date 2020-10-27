@@ -738,10 +738,11 @@ const modal = $.modal({
                 <option>Українська мова</option>
                 <option>Математика</option>
             </select>
-            <div class="select">Як Ви хочете щоб ми з Вами звязались: телефон/пошта?</div>
+            <div class="select">Як Ви хочете щоб ми з Вами зв'язатісь?</div>
             <select name="connection" class="form__input">
-                <option selected>Телефон</option>
-                <option>Пошта</option>
+                <option selected>Зателефонуйте мені</option>
+                <option>напишіть у Telegram</option>
+                <option>напишіть у Viber</option>
             </select>
             <div class="select">В якому Ви (Ваша дитина) класі?</div>
             <select name="SchoolClass" class="form__input">
